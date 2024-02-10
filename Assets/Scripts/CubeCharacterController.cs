@@ -1,42 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class CubeCharacterController : MonoBehaviour
+namespace CubeRunner
 {
-    public float forwardSpeed = 1f;
-    public float horizontalSpeed = 1f;
-
-    [Range(0, 1)]
-    public float xInput;
-
-    private Rigidbody m_RB;
-    private Transform m_Transform;
-    [SerializeField]
-    private float m_MaxXOffset;
-
-    private void Awake()
+    public class CubeCharacterController : MonoBehaviour
     {
-        m_RB = GetComponent<Rigidbody>();
-        m_Transform = transform;
-    }
+        public float forwardSpeed = 1f;
+        public float horizontalSpeed = 1f;
 
-    private void FixedUpdate()
-    {
-        var currentPosition = m_Transform.position;
-        var vel = new Vector3();
-        vel.x = xInput * horizontalSpeed;
-        vel.z = forwardSpeed;
-        m_RB.velocity = vel;
+        [Range(0, 1)]
+        public float xInput;
 
-        var nextPos = currentPosition + Time.fixedDeltaTime * vel;
+        private Rigidbody m_RB;
+        private Transform m_Transform;
 
-        if (Mathf.Abs(nextPos.x) >= m_MaxXOffset)
+        private const float MAX_X = Constants.LEVEL_WIDTH / 2f;
+        
+        private void Awake()
         {
-            nextPos.x = currentPosition.x;
+            m_RB = GetComponent<Rigidbody>();
+            m_Transform = transform;
         }
 
-        m_RB.MovePosition(nextPos);
+        private void FixedUpdate()
+        {
+            var currentPosition = m_Transform.position;
+            var vel = new Vector3();
+            vel.x = xInput * horizontalSpeed;
+            vel.z = forwardSpeed;
+            m_RB.velocity = vel;
+
+            var nextPos = currentPosition + Time.fixedDeltaTime * vel;
+
+            if (Mathf.Abs(nextPos.x) >= MAX_X)
+            {
+                nextPos.x = currentPosition.x;
+            }
+
+            m_RB.MovePosition(nextPos);
+        }
     }
 }

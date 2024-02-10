@@ -1,75 +1,77 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackManager : MonoBehaviour
+namespace CubeRunner
 {
-    public List<GameObject> LevelParts;
-
-    const int LEVEL_WIDTH = 30;
-  
-    private int m_CurrentOffset = 30;
-    public static TrackManager Instance { get; private set; }
-
-    [SerializeField]
-    private int m_AwakeSpawnLocations = 3;
-
-    [Header("Location Spawn Tween")]
-    [SerializeField]
-    private float m_TweenDuration = 2f;
-    [SerializeField]
-    private Ease m_TweenEaseType = Ease.Linear;
-    [SerializeField]
-    private float m_SpawnYOffset = -50f;
-    private void Awake()
+    public class TrackManager : MonoBehaviour
     {
-        Init();
-        Instance = this;
-    }
+        public List<GameObject> LevelParts;
 
-    private void Init()
-    {
-        for (int i = 0; i < m_AwakeSpawnLocations; i++)
+        private int m_CurrentOffset = Constants.LEVEL_LEN;
+        public static TrackManager Instance { get; private set; }
+
+        [SerializeField]
+        private int m_AwakeSpawnLocations = 3;
+
+        [Header("Location Spawn Tween")]
+        [SerializeField]
+        private float m_TweenDuration = 2f;
+        [SerializeField]
+        private Ease m_TweenEaseType = Ease.Linear;
+        [SerializeField]
+        private float m_SpawnYOffset = -50f;
+
+        private void Awake()
         {
-            SpawnNewLocation();
+            Init();
+            Instance = this;
         }
-    }
 
-    public TrackLocation SpawnNewLocation()
-    {
-        var prefab = LevelParts[Random.Range(0, LevelParts.Count)];
-        var spawnPos = new Vector3(0, 0, m_CurrentOffset);
-        var instance = GameObject.Instantiate(prefab, spawnPos, Quaternion.identity);
-        var trackLocation = instance.GetComponent<TrackLocation>();
+        private void Init()
+        {
+            for (int i = 0; i < m_AwakeSpawnLocations; i++)
+            {
+                SpawnNewLocation();
+            }
+        }
 
-        trackLocation.locationTrigger.onTriggerEnter += LocationTrigger_onTriggerEnter;
-        trackLocation.locationTrigger.onTriggerExit += (coll) => { 
-            Destroy(instance, 2f);
-        };
+        public TrackLocation SpawnNewLocation()
+        {
+            var prefab = LevelParts[Random.Range(0, LevelParts.Count)];
+            var spawnPos = new Vector3(0, 0, m_CurrentOffset);
+            var instance = GameObject.Instantiate(prefab, spawnPos, Quaternion.identity);
+            var trackLocation = instance.GetComponent<TrackLocation>();
 
-        m_CurrentOffset += LEVEL_WIDTH;
+            trackLocation.locationTrigger.onTriggerEnter += LocationTrigger_onTriggerEnter;
+            trackLocation.locationTrigger.onTriggerExit += (coll) =>
+            {
+                Destroy(instance, 2f);
+            };
 
-        return trackLocation;
-    }
+            m_CurrentOffset += Constants.LEVEL_LEN;
 
-    public void SpawnNewLocationWithTween()
-    {
-        var newTrack = SpawnNewLocation();
+            return trackLocation;
+        }
 
-        var startPosition = newTrack.transform.position;
-        var endPosition = startPosition;
+        public void SpawnNewLocationWithTween()
+        {
+            var newTrack = SpawnNewLocation();
 
-        startPosition.y = m_SpawnYOffset;
-        newTrack.transform.position = startPosition;
+            var startPosition = newTrack.transform.position;
+            var endPosition = startPosition;
 
-        newTrack.transform
-            .DOMove(endPosition, m_TweenDuration)
-            .SetEase(m_TweenEaseType);
-    }
+            startPosition.y = m_SpawnYOffset;
+            newTrack.transform.position = startPosition;
 
-    private void LocationTrigger_onTriggerEnter(Collider obj)
-    {
-        SpawnNewLocationWithTween();
+            newTrack.transform
+                .DOMove(endPosition, m_TweenDuration)
+                .SetEase(m_TweenEaseType);
+        }
+
+        private void LocationTrigger_onTriggerEnter(Collider obj)
+        {
+            SpawnNewLocationWithTween();
+        }
     }
 }

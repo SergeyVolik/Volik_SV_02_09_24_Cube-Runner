@@ -1,18 +1,21 @@
 using System;
 using UnityEngine;
 
-public class PhysicsCallbacks : MonoBehaviour
+namespace CubeRunner
 {
-    public event Action<Collider> onTriggerEnter = delegate { };
-    public event Action<Collider> onTriggerExit = delegate { };
-
-    private void OnTriggerEnter(Collider other)
+    public class PhysicsCallbacks : MonoBehaviour
     {
-        onTriggerEnter.Invoke(other);
-    }
+        public event Action<Collider> onTriggerEnter = delegate { };
+        public event Action<Collider> onTriggerExit = delegate { };
 
-    private void OnTriggerExit(Collider other)
-    {
-        onTriggerExit.Invoke(other);
+        private void OnTriggerEnter(Collider other)
+        {
+            onTriggerEnter.Invoke(other);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            onTriggerExit.Invoke(other);
+        }
     }
 }

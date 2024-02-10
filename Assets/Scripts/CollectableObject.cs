@@ -1,19 +1,13 @@
 using UnityEngine;
 
-public class CollectableObject : MonoBehaviour
+namespace CubeRunner
 {
-    public void Visit(Player toVisit)
+    public class CollectableObject : MonoBehaviour, IVisitor<Player>
     {
-        toVisit.AddCube();
-        GameObject.Destroy(gameObject);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log(other.name);
-        if (other.TryGetComponent<Player>(out var playerC))
+        public void Visit(Player toVisit)
         {
-            Visit(playerC);
+            toVisit.AddCube();
+            gameObject.SetActive(false);
         }
     }
 }
