@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CollectableObject : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Visit(Player toVisit)
     {
-        
+        toVisit.AddCube();
+        GameObject.Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        //Debug.Log(other.name);
+        if (other.TryGetComponent<Player>(out var playerC))
+        {
+            Visit(playerC);
+        }
     }
 }

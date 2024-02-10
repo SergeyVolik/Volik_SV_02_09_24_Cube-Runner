@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 787581343023201245}
   - component: {fileID: 8363783677270598084}
-  - component: {fileID: 401430677696856178}
   - component: {fileID: 7470550962535559029}
-  m_Layer: 8
-  m_Name: CollectableCube
+  m_Layer: 0
+  m_Name: HealthCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,24 +41,12 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1389219155161092447}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_Material: {fileID: 13400000, guid: 1fc304f7b6a439d4c97e8d0cdffc5e35, type: 2}
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &401430677696856178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1389219155161092447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbde5e18f36be1746ace74efa442e5f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &7470550962535559029
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -74,7 +61,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!1001 &1144745408458203781
 PrefabInstance:

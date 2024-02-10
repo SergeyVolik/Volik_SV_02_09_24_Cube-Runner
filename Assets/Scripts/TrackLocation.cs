@@ -9,8 +9,4 @@ public class TrackLocation : MonoBehaviour
     [FormerlySerializedAs("m_LocationTrigger")]
     public PhysicsCallbacks locationTrigger;
 
-    private void Awake()
-    {
-      
-    }
 }

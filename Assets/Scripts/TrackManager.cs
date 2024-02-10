@@ -8,9 +8,12 @@ public class TrackManager : MonoBehaviour
     public List<GameObject> LevelParts;
 
     const int LEVEL_WIDTH = 30;
-    const int AWAKE_SPAWN_LOCATIONS = 3;
+  
     private int m_CurrentOffset = 30;
     public static TrackManager Instance { get; private set; }
+
+    [SerializeField]
+    private int m_AwakeSpawnLocations = 3;
 
     [Header("Location Spawn Tween")]
     [SerializeField]
@@ -27,7 +30,7 @@ public class TrackManager : MonoBehaviour
 
     private void Init()
     {
-        for (int i = 0; i < AWAKE_SPAWN_LOCATIONS; i++)
+        for (int i = 0; i < m_AwakeSpawnLocations; i++)
         {
             SpawnNewLocation();
         }
@@ -41,7 +44,9 @@ public class TrackManager : MonoBehaviour
         var trackLocation = instance.GetComponent<TrackLocation>();
 
         trackLocation.locationTrigger.onTriggerEnter += LocationTrigger_onTriggerEnter;
-        trackLocation.locationTrigger.onTriggerExit += LocationTrigger_onTriggerExit;
+        trackLocation.locationTrigger.onTriggerExit += (coll) => { 
+            Destroy(instance, 2f);
+        };
 
         m_CurrentOffset += LEVEL_WIDTH;
 
@@ -61,11 +66,6 @@ public class TrackManager : MonoBehaviour
         newTrack.transform
             .DOMove(endPosition, m_TweenDuration)
             .SetEase(m_TweenEaseType);
-    }
-
-    private void LocationTrigger_onTriggerExit(Collider obj)
-    {
-
     }
 
     private void LocationTrigger_onTriggerEnter(Collider obj)

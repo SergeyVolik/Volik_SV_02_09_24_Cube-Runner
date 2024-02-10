@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 688482036594763119}
   - component: {fileID: 688482036594763112}
   - component: {fileID: 6251044843815581764}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Zone Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21306c305326001439d2a9fe21b364b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LocationTrigger: {fileID: 6251044843815581764}
+  locationTrigger: {fileID: 6251044843815581764}
 --- !u!1001 &688482035892575504
 PrefabInstance:
   m_ObjectHideFlags: 0
