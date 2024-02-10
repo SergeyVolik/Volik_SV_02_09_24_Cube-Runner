@@ -43,7 +43,8 @@ namespace CubeRunner
             vel.z = forwardSpeed;
             m_RB.velocity = vel;
 
-            float x = math.remap(0, Screen.width, -MAX_X, MAX_X, inputScreenX); 
+            float offsetMult = 1.2f;  
+            float x = math.remap(0, Screen.width, -MAX_X * offsetMult, MAX_X * offsetMult, inputScreenX);
             var nextPos = currentPosition + Time.fixedDeltaTime * vel;
             nextPos.x = Mathf.Clamp(x, -MAX_X, MAX_X);
 
