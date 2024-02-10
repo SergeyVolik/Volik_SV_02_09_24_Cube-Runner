@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using Cinemachine;
 namespace CubeRunner
 {
     public class LocationObstacle : MonoBehaviour, IVisitor<Player>
     {
+        private CinemachineImpulseSource m_CameraImpuls;
         IEnumerable<Collider> wallBlocksColliders;
 
         private void Awake()
         {
+            m_CameraImpuls = GetComponent<CinemachineImpulseSource>();
             wallBlocksColliders = gameObject
                 .GetComponentsInChildren<Collider>()
                 .Where((e) => e.gameObject != gameObject);
@@ -45,6 +47,8 @@ namespace CubeRunner
                     healthCube.transform.position = healkthCubePos;
                 }
             }
+
+            m_CameraImpuls.GenerateImpulse();
         }
     }
 }

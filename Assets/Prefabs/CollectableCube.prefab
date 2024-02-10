@@ -60,6 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbde5e18f36be1746ace74efa442e5f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_WorldSpaceMessagePrefab: {fileID: 7992831679333375622, guid: e3f3042afd3e879458c1e9b8535296e0,
+    type: 3}
 --- !u!54 &7470550962535559029
 Rigidbody:
   m_ObjectHideFlags: 0

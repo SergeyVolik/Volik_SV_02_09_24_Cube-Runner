@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace CubeRunner
 {
@@ -29,11 +28,26 @@ namespace CubeRunner
         private CubeCharacterController m_CharController;
         private Vector3 m_StartModelPosition;
 
+
         private void Awake()
         {
             m_CharController = GetComponent<CubeCharacterController>();
             m_StartModelPosition = m_AnimatedModel.transform.localPosition;
         }
+
+        private void Update()
+        {
+            UpdateInput();
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent<IVisitor<Player>>(out var obs))
+            {
+                obs.Visit(this);
+            }
+        }
+
+        public Vector3 GetTopPosition() => m_AnimatedModel.transform.position;
 
         public void RemoveCube(HealthCube cube)
         {
@@ -51,43 +65,33 @@ namespace CubeRunner
 
             var cubesLen = m_ListOfCubes.Count * CUBE_HEIGHT;
 
-            m_AnimatedModel.SetTrigger("Jump");
-
-            var modelPos = m_StartModelPosition;
-            modelPos.y += cubesLen;
-            m_AnimatedModel.transform.localPosition = modelPos;
+            UpdateAnimatedModel(cubesLen);
 
             m_ParticleSystem?.Play();
 
             float cubeYOffset = cubesLen - cubeHolderOffset.y;
             var spawnPos = m_CubesParent.position + new Vector3(0, cubeYOffset, 0);
 
-            var cubeInstance = GameObject.Instantiate(m_CubePrefab, spawnPos, Quaternion.identity, m_CubesParent);
-
+            var cubeInstance = GameObjectPool.GetPoolObject(m_CubePrefab);
+            cubeInstance.gameObject.SetActive(false);
+            cubeInstance.transform.SetParent(m_CubesParent);
+            cubeInstance.transform.position = spawnPos;
             m_ListOfCubes.Add(cubeInstance);
         }
 
-        private void Update()
+        private void UpdateAnimatedModel(float cubesLen)
         {
-            UpdateInput();
+            m_AnimatedModel.SetTrigger("Jump");
+
+            var modelPos = m_StartModelPosition;
+            modelPos.y += cubesLen;
+            m_AnimatedModel.transform.localPosition = modelPos;
         }
 
         private void UpdateInput()
         {
             float xInput = Input.GetAxis("Horizontal");
             m_CharController.xInput = xInput;
-        }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.TryGetComponent<LocationObstacle>(out var obs))
-            {
-                obs.Visit(this);
-            }
-
-            if (other.TryGetComponent<CollectableObject>(out var collObj))
-            {
-                collObj.Visit(this);
-            }
         }
     }
 }
