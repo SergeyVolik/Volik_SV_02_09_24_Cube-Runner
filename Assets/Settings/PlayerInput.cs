@@ -28,7 +28,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ""id"": ""e0f64605-f2fd-4c9f-8e50-557c0aaad9d9"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""ScreenPosition"",
                     ""type"": ""Value"",
                     ""id"": ""9101503c-1e2b-447e-9075-21a8273e95b5"",
                     ""expectedControlType"": ""Vector2"",
@@ -41,22 +41,22 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""873a2647-0e56-4c51-97c1-ba481c164a09"",
-                    ""path"": ""<Mouse>/delta"",
+                    ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""ScreenPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""72cca5ff-3bee-417b-a086-3a7d566d9513"",
-                    ""path"": ""<Pointer>/delta"",
+                    ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""ScreenPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -84,7 +84,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
 }");
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-        m_Gameplay_Move = m_Gameplay.FindAction("Move", throwIfNotFound: true);
+        m_Gameplay_ScreenPosition = m_Gameplay.FindAction("ScreenPosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -146,12 +146,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     // Gameplay
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
-    private readonly InputAction m_Gameplay_Move;
+    private readonly InputAction m_Gameplay_ScreenPosition;
     public struct GameplayActions
     {
         private @PlayerInput m_Wrapper;
         public GameplayActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Gameplay_Move;
+        public InputAction @ScreenPosition => m_Wrapper.m_Gameplay_ScreenPosition;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -161,16 +161,16 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
+            @ScreenPosition.started += instance.OnScreenPosition;
+            @ScreenPosition.performed += instance.OnScreenPosition;
+            @ScreenPosition.canceled += instance.OnScreenPosition;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
+            @ScreenPosition.started -= instance.OnScreenPosition;
+            @ScreenPosition.performed -= instance.OnScreenPosition;
+            @ScreenPosition.canceled -= instance.OnScreenPosition;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -208,6 +208,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     }
     public interface IGameplayActions
     {
-        void OnMove(InputAction.CallbackContext context);
+        void OnScreenPosition(InputAction.CallbackContext context);
     }
 }

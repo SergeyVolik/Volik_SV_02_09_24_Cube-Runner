@@ -1,120 +1,99 @@
-using System;
-using System.Collections.Generic;
+using CandyCoded.HapticFeedback;
 using UnityEngine;
-using UnityEngine.Windows;
+using UnityEngine.Serialization;
 
 namespace CubeRunner
 {
+    [RequireComponent(typeof(CubeHealthBar))]
     [RequireComponent(typeof(CubeCharacterController))]
     public class Player : MonoBehaviour
     {
         [SerializeField]
-        private HealthCube m_CubePrefab;
-
-        [SerializeField]
         private Animator m_AnimatedModel;
 
+        [FormerlySerializedAs("m_ParticleSystem")]
         [SerializeField]
         private ParticleSystem m_ParticleSystem;
 
         [SerializeField]
-        private Transform m_CubesParent;
+        private ParticleSystem m_WarpEffect;
 
         [SerializeField]
-        private List<HealthCube> m_ListOfCubes = new List<HealthCube>();
+        private BoxCollider m_TopBox;
 
         PlayerInput m_Input;
 
-        public IEnumerable<HealthCube> GetHealthCubes() => m_ListOfCubes;
-
-        const float CUBE_HEIGHT = 1f;
-
         private CubeCharacterController m_CharController;
+        private CubeHealthBar m_HealthBar;
         private Vector3 m_StartModelPosition;
-
-        public event Action onDeath = delegate { };
 
         private void Awake()
         {
+            m_StartModelPosition = m_TopBox.transform.localPosition;
+
             m_Input = new PlayerInput();
             m_Input.Enable();
+
             m_CharController = GetComponent<CubeCharacterController>();
-            m_StartModelPosition = m_AnimatedModel.transform.localPosition;
+            m_CharController.onActivated += () =>
+            {
+                m_WarpEffect.Play();
+            };  
+
+            m_HealthBar = GetComponent<CubeHealthBar>();
+            m_HealthBar.onDeath += ExecuteDeath;
+            m_HealthBar.onCubeAdded += M_HealthBar_onCubeAdded;
         }
 
         private void Update()
         {
             UpdateInput();
         }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<IVisitor<Player>>(out var obs))
+            if (other.TryGetComponent<IVisitor<CubeHealthBar>>(out var visitor))
             {
-                obs.Visit(this);
+                visitor.Visit(m_HealthBar);
             }
         }
 
-        public Vector3 GetTopPosition() => m_AnimatedModel.transform.position;
-
-        public void RemoveCube(HealthCube cube)
+        private void M_HealthBar_onCubeAdded()
         {
-            if (cube.transform.parent == null)
-                return;
-
-            DelayExecutor.Execute(1f, () =>
-            {
-                cube.gameObject.SetActive(false);
-            });
-
-            cube.transform.parent = null;
-            m_ListOfCubes.Remove(cube);
-        }
-
-        public void AddCube()
-        {
-            var cubeHolderOffset = m_CubesParent.transform.localPosition;
-
-            var cubesLen = m_ListOfCubes.Count * CUBE_HEIGHT;
-
-            UpdateAnimatedModel(cubesLen);
-
+            m_AnimatedModel.SetTrigger("Jump");
             m_ParticleSystem?.Play();
 
-            float cubeYOffset = cubesLen - cubeHolderOffset.y;
-            var spawnPos = m_CubesParent.position + new Vector3(0, cubeYOffset, 0);
+            UpdateTopBox(m_HealthBar.GetHeight());
+        }
 
-            var cubeInstance = GameObjectPool.GetPoolObject(m_CubePrefab);
-            cubeInstance.gameObject.SetActive(true);
-            cubeInstance.transform.SetParent(m_CubesParent);
-            cubeInstance.transform.position = spawnPos;
-            m_ListOfCubes.Add(cubeInstance);
+        private void UpdateTopBox(float cubesHeight)
+        {
+            var modelPos = m_StartModelPosition;
+            modelPos.y += cubesHeight;
+            m_TopBox.transform.localPosition = modelPos;
         }
 
         public void ExecuteDeath()
-        {
+        {          
+            HapticFeedback.HeavyFeedback();
             m_CharController.enabled = false;
             ActivateRagdoll();
         }
 
         private void ActivateRagdoll()
         {
-            //throw new NotImplementedException();
-        }
-
-        private void UpdateAnimatedModel(float cubesLen)
-        {
-            m_AnimatedModel.SetTrigger("Jump");
-
-            var modelPos = m_StartModelPosition;
-            modelPos.y += cubesLen;
-            m_AnimatedModel.transform.localPosition = modelPos;
+            m_AnimatedModel.enabled = false;
+            m_AnimatedModel.transform.SetParent(null);
+            m_AnimatedModel.GetComponent<Ragdoll>().Activate();
+            m_CharController.Collider.enabled = false;
+            m_TopBox.enabled = false;
         }
 
         private void UpdateInput()
         {
-            var input = m_Input.Gameplay.Move.ReadValue<Vector2>();
+            var input = m_Input.Gameplay.ScreenPosition.ReadValue<Vector2>();
             float xInput = input.x;
-            m_CharController.xInput = xInput;
+            m_CharController.inputScreenX = xInput;
         }
     }
 }

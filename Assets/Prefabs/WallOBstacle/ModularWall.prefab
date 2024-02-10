@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1901777949767184109}
   - component: {fileID: 8833823656846029263}
   - component: {fileID: 363347223984817746}
-  m_Layer: 0
+  - component: {fileID: 1392939492076177669}
+  m_Layer: 8
   m_Name: ModularWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,6 +104,19 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: -0.1, y: -0.1, z: 0}
+--- !u!65 &1392939492076177669
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901777949767184110}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.9660873, y: 6.749428, z: 1}
+  m_Center: {x: -0.050927997, y: 2.874714, z: 0}
 --- !u!1001 &530352286893392192
 PrefabInstance:
   m_ObjectHideFlags: 0

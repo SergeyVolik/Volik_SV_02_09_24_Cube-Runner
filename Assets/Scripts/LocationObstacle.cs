@@ -3,27 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Cinemachine;
+using CandyCoded.HapticFeedback;
+
 namespace CubeRunner
 {
-    public class LocationObstacle : MonoBehaviour, IVisitor<Player>
+    public class LocationObstacle : MonoBehaviour, IVisitor<CubeHealthBar>
     {
         private CinemachineImpulseSource m_CameraImpuls;
-        IEnumerable<Collider> wallBlocksColliders;
+        IEnumerable<Collider> m_WallBlocksColliders;
 
         private void Awake()
         {
             m_CameraImpuls = GetComponent<CinemachineImpulseSource>();
-            wallBlocksColliders = gameObject
+
+            m_WallBlocksColliders = gameObject
                 .GetComponentsInChildren<Collider>()
                 .Where((e) => e.gameObject != gameObject);
         }
 
-        public void Visit(Player player)
+        public void Visit(CubeHealthBar player)
         {
             var healthCubes = player.GetHealthCubes().ToArray();
 
-            var topPos = player.GetTopPosition();
-            foreach (var block in wallBlocksColliders)
+            bool executeDeath = false;
+
+            Handheld.Vibrate();
+
+            foreach (var block in m_WallBlocksColliders)
             {
                 if (false == block.gameObject.activeSelf)
                 {
@@ -42,6 +48,11 @@ namespace CubeRunner
                         continue;
                     }
 
+                    if (player.IsTopCube(healthCube))
+                    {
+                        executeDeath = true;
+                    }
+
                     player.RemoveCube(healthCube);
                     healkthCubePos.z = blockPos.z - Constants.CUBE_SIZE;
 
@@ -49,7 +60,16 @@ namespace CubeRunner
                 }
             }
 
-            //m_CameraImpuls.GenerateImpulse();
+            if (executeDeath)
+            {
+                player.ExecuteDeath();
+            }
+            else
+            {
+                HapticFeedback.MediumFeedback();
+            }
+
+            m_CameraImpuls.GenerateImpulse();
         }
     }
 }

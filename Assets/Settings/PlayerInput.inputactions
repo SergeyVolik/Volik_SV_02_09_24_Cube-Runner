@@ -6,7 +6,7 @@
             "id": "e0f64605-f2fd-4c9f-8e50-557c0aaad9d9",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "ScreenPosition",
                     "type": "Value",
                     "id": "9101503c-1e2b-447e-9075-21a8273e95b5",
                     "expectedControlType": "Vector2",
@@ -19,22 +19,22 @@
                 {
                     "name": "",
                     "id": "873a2647-0e56-4c51-97c1-ba481c164a09",
-                    "path": "<Mouse>/delta",
+                    "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "ScreenPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "72cca5ff-3bee-417b-a086-3a7d566d9513",
-                    "path": "<Pointer>/delta",
+                    "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "ScreenPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

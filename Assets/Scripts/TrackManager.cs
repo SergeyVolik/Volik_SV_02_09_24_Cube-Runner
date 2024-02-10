@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace CubeRunner
     public class TrackManager : MonoBehaviour
     {
         public List<GameObject> LevelParts;
+
+        public TrackSettingSettingSO trackSetting;
 
         private int m_CurrentOffset = Constants.LEVEL_LEN;
         public static TrackManager Instance { get; private set; }
@@ -21,6 +24,8 @@ namespace CubeRunner
         private Ease m_TweenEaseType = Ease.Linear;
         [SerializeField]
         private float m_SpawnYOffset = -50f;
+
+        public event Action onLocationFinished = delegate { };
 
         private void Awake()
         {
@@ -38,15 +43,27 @@ namespace CubeRunner
 
         public TrackLocation SpawnNewLocation()
         {
-            var prefab = LevelParts[Random.Range(0, LevelParts.Count)];
-            var spawnPos = new Vector3(0, 0, m_CurrentOffset);
-            var instance = GameObject.Instantiate(prefab, spawnPos, Quaternion.identity);
-            var trackLocation = instance.GetComponent<TrackLocation>();
+            var prefab = LevelParts[UnityEngine.Random.Range(0, LevelParts.Count)];
 
+            var spawnPos = new Vector3(0, 0, m_CurrentOffset);
+            var instance = GameObjectPool.GetPoolObject(prefab);
+            instance.transform.position = spawnPos;
+            instance.SetActive(true);
+
+            var trackLocation = instance.GetComponent<TrackLocation>();       
             trackLocation.locationTrigger.onTriggerEnter += LocationTrigger_onTriggerEnter;
-            trackLocation.locationTrigger.onTriggerExit += (coll) =>
+
+            Action<Collider> action = null;
+                
+            action = (coll) =>
             {
-                Destroy(instance, 2f);
+                trackLocation.locationTrigger.onTriggerEnter -= LocationTrigger_onTriggerEnter;
+                trackLocation.locationTrigger.onTriggerExit -= action;
+
+                DelayExecutor.Execute(2f, () =>
+                {
+                    instance.SetActive(false);
+                });
             };
 
             m_CurrentOffset += Constants.LEVEL_LEN;
@@ -72,6 +89,7 @@ namespace CubeRunner
         private void LocationTrigger_onTriggerEnter(Collider obj)
         {
             SpawnNewLocationWithTween();
+            onLocationFinished.Invoke();
         }
     }
 }

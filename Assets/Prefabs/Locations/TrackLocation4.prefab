@@ -429,7 +429,7 @@ PrefabInstance:
     - target: {fileID: 787581343023201245, guid: 0ca1b98bea1246544bf124845f10f51a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.93
+      value: -1.11
       objectReference: {fileID: 0}
     - target: {fileID: 787581343023201245, guid: 0ca1b98bea1246544bf124845f10f51a,
         type: 3}
@@ -439,7 +439,7 @@ PrefabInstance:
     - target: {fileID: 787581343023201245, guid: 0ca1b98bea1246544bf124845f10f51a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.586667
+      value: 12.94
       objectReference: {fileID: 0}
     - target: {fileID: 787581343023201245, guid: 0ca1b98bea1246544bf124845f10f51a,
         type: 3}
@@ -567,22 +567,22 @@ PrefabInstance:
     - target: {fileID: 2639078477093641468, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.93
+      value: 1.49
       objectReference: {fileID: 0}
     - target: {fileID: 2639078477093641468, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.253334
+      value: 21.32
       objectReference: {fileID: 0}
     - target: {fileID: 4500781727971494307, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.93
+      value: -0.99
       objectReference: {fileID: 0}
     - target: {fileID: 4500781727971494307, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 25.586666
+      value: 25.27
       objectReference: {fileID: 0}
     - target: {fileID: 6886840345024184414, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
@@ -592,7 +592,7 @@ PrefabInstance:
     - target: {fileID: 6886840345024184414, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.92
+      value: 16.57
       objectReference: {fileID: 0}
     - target: {fileID: 9105143559704754290, guid: e14da592fafeac44bbb9745c900c3401,
         type: 3}
