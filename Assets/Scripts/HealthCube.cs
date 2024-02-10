@@ -12,6 +12,6 @@ namespace CubeRunner
             Collider = GetComponent<Collider>();
             RB = GetComponent<Rigidbody>();
             RB.WakeUp();
-        }
+        }       
     }
 }

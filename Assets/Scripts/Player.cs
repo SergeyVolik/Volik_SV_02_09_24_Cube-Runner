@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace CubeRunner
 {
@@ -21,6 +23,8 @@ namespace CubeRunner
         [SerializeField]
         private List<HealthCube> m_ListOfCubes = new List<HealthCube>();
 
+        PlayerInput m_Input;
+
         public IEnumerable<HealthCube> GetHealthCubes() => m_ListOfCubes;
 
         const float CUBE_HEIGHT = 1f;
@@ -28,9 +32,12 @@ namespace CubeRunner
         private CubeCharacterController m_CharController;
         private Vector3 m_StartModelPosition;
 
+        public event Action onDeath = delegate { };
 
         private void Awake()
         {
+            m_Input = new PlayerInput();
+            m_Input.Enable();
             m_CharController = GetComponent<CubeCharacterController>();
             m_StartModelPosition = m_AnimatedModel.transform.localPosition;
         }
@@ -54,7 +61,11 @@ namespace CubeRunner
             if (cube.transform.parent == null)
                 return;
 
-            GameObject.Destroy(cube, 1f);
+            DelayExecutor.Execute(1f, () =>
+            {
+                cube.gameObject.SetActive(false);
+            });
+
             cube.transform.parent = null;
             m_ListOfCubes.Remove(cube);
         }
@@ -73,10 +84,21 @@ namespace CubeRunner
             var spawnPos = m_CubesParent.position + new Vector3(0, cubeYOffset, 0);
 
             var cubeInstance = GameObjectPool.GetPoolObject(m_CubePrefab);
-            cubeInstance.gameObject.SetActive(false);
+            cubeInstance.gameObject.SetActive(true);
             cubeInstance.transform.SetParent(m_CubesParent);
             cubeInstance.transform.position = spawnPos;
             m_ListOfCubes.Add(cubeInstance);
+        }
+
+        public void ExecuteDeath()
+        {
+            m_CharController.enabled = false;
+            ActivateRagdoll();
+        }
+
+        private void ActivateRagdoll()
+        {
+            //throw new NotImplementedException();
         }
 
         private void UpdateAnimatedModel(float cubesLen)
@@ -90,7 +112,8 @@ namespace CubeRunner
 
         private void UpdateInput()
         {
-            float xInput = Input.GetAxis("Horizontal");
+            var input = m_Input.Gameplay.Move.ReadValue<Vector2>();
+            float xInput = input.x;
             m_CharController.xInput = xInput;
         }
     }

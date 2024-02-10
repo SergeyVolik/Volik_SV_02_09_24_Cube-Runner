@@ -22,6 +22,7 @@ namespace CubeRunner
         {
             var healthCubes = player.GetHealthCubes().ToArray();
 
+            var topPos = player.GetTopPosition();
             foreach (var block in wallBlocksColliders)
             {
                 if (false == block.gameObject.activeSelf)
@@ -48,7 +49,7 @@ namespace CubeRunner
                 }
             }
 
-            m_CameraImpuls.GenerateImpulse();
+            //m_CameraImpuls.GenerateImpulse();
         }
     }
 }

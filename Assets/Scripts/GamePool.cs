@@ -86,6 +86,8 @@ namespace CubeRunner
         public void Release(GameObject item)
         {
             poolItems.Push(item);
+            //item.SetActive(true);
+            //item.transform.SetParent(m_PoolRoot);
             item.SetActive(false);
         }
     }

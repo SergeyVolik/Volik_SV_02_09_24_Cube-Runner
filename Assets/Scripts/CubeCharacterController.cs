@@ -32,8 +32,8 @@ namespace CubeRunner
             var nextPos = currentPosition + Time.fixedDeltaTime * vel;
 
             if (Mathf.Abs(nextPos.x) >= MAX_X)
-            {
-                nextPos.x = currentPosition.x;
+            {               
+                nextPos.x = Mathf.Clamp(currentPosition.x, -MAX_X, MAX_X);
             }
 
             m_RB.MovePosition(nextPos);
