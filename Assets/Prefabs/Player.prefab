@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 8393445767929937593}
   - component: {fileID: 8690390274221269796}
   - component: {fileID: 1997829591}
+  - component: {fileID: 3441161606662405033}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -292,6 +293,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5b7d4750028a9e4da571885e01c2039, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WorldSpaceMessagePrefab: {fileID: 7992831679333375622, guid: e3f3042afd3e879458c1e9b8535296e0,
+    type: 3}
+--- !u!114 &3441161606662405033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076399478334519671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af10a4d520e41b4caa8458158a41640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &9220729649864102383

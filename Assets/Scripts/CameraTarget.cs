@@ -17,7 +17,7 @@ namespace CubeRunner
         {
             if (m_PlayerTransform == null)
             {
-                var player = FindAnyObjectByType<Player>();
+                var player = FindAnyObjectByType<CubeCharacter>();
 
                 if (player == null)
                     return;

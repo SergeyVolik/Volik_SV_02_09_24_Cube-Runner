@@ -9,8 +9,6 @@ namespace CubeRunner
     {
         public List<GameObject> LevelParts;
 
-        public TrackSettingSettingSO trackSetting;
-
         private int m_CurrentOffset = Constants.LEVEL_LEN;
         public static TrackManager Instance { get; private set; }
 

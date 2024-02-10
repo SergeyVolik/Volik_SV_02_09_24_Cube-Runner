@@ -20,7 +20,7 @@ namespace CubeRunner
 
         private RectTransform m_PrevUI;
         private PlayerInput m_Input;
-        private Player m_Player;
+        private CubeCharacter m_Player;
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace CubeRunner
 
             m_Input.Gameplay.ScreenPosition.performed += Move_performed;
             m_Input.Enable();
-            m_Player = FindObjectOfType<Player>();
+            m_Player = FindObjectOfType<CubeCharacter>();
             var healthBar = m_Player.GetComponent<CubeHealthBar>();
             Assert.IsTrue(m_Player != null);
 

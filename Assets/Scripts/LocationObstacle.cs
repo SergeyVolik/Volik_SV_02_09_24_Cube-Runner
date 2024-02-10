@@ -7,7 +7,7 @@ using CandyCoded.HapticFeedback;
 
 namespace CubeRunner
 {
-    public class LocationObstacle : MonoBehaviour, IVisitor<CubeHealthBar>
+    public class LocationObstacle : MonoBehaviour, IVisitor<CubeCharacter>
     {
         private CinemachineImpulseSource m_CameraImpuls;
         IEnumerable<Collider> m_WallBlocksColliders;
@@ -21,14 +21,18 @@ namespace CubeRunner
                 .Where((e) => e.gameObject != gameObject);
         }
 
-        public void Visit(CubeHealthBar player)
+        HashSet<HealthCube> m_ToRemove = new HashSet<HealthCube>();
+
+        public void Visit(CubeCharacter character)
         {
-            var healthCubes = player.GetHealthCubes().ToArray();
+            m_ToRemove.Clear();
+            var healthCubes = character.HealthBar.GetHealthCubes();
 
             bool executeDeath = false;
-
+            var chracterBounds = character.CharacterBox.bounds;
             Handheld.Vibrate();
 
+            //interate over all blocks and check bounds intersections
             foreach (var block in m_WallBlocksColliders)
             {
                 if (false == block.gameObject.activeSelf)
@@ -41,31 +45,44 @@ namespace CubeRunner
 
                 foreach (var healthCube in healthCubes)
                 {
-                    Vector3 healkthCubePos = healthCube.transform.position;
+                    Vector3 healthCubePos = healthCube.transform.position;
+
+                    //check intersection character - block
+                    if (blockBounds.Intersects(chracterBounds))
+                    {
+                        executeDeath = true;
+                        break;
+                    }
 
                     if (false == healthCube.Collider.bounds.Intersects(blockBounds))
                     {
                         continue;
                     }
 
-                    if (player.IsTopCube(healthCube))
+                    if (character.HealthBar.IsTopCube(healthCube))
                     {
                         executeDeath = true;
+                        break;
                     }
 
-                    player.RemoveCube(healthCube);
-                    healkthCubePos.z = blockPos.z - Constants.CUBE_SIZE;
+                    m_ToRemove.Add(healthCube);
+                    healthCubePos.z = blockPos.z - Constants.CUBE_SIZE;
 
-                    healthCube.transform.position = healkthCubePos;
+                    healthCube.transform.position = healthCubePos;
                 }
             }
 
             if (executeDeath)
             {
-                player.ExecuteDeath();
+                character.HealthBar.ExecuteDeath();
             }
             else
             {
+                foreach (var item in m_ToRemove)
+                {
+                    character.HealthBar.RemoveCube(item);
+                }
+
                 HapticFeedback.MediumFeedback();
             }
 

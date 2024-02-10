@@ -6,7 +6,7 @@ namespace CubeRunner
 {
     [RequireComponent(typeof(CubeHealthBar))]
     [RequireComponent(typeof(CubeCharacterController))]
-    public class Player : MonoBehaviour
+    public class CubeCharacter : MonoBehaviour
     {
         [SerializeField]
         private Animator m_AnimatedModel;
@@ -21,40 +21,32 @@ namespace CubeRunner
         [SerializeField]
         private BoxCollider m_TopBox;
 
-        PlayerInput m_Input;
+        public BoxCollider CharacterBox => m_TopBox;
 
         private CubeCharacterController m_CharController;
-        private CubeHealthBar m_HealthBar;
+        public CubeHealthBar HealthBar { get; private set; }
         private Vector3 m_StartModelPosition;
 
         private void Awake()
         {
             m_StartModelPosition = m_TopBox.transform.localPosition;
 
-            m_Input = new PlayerInput();
-            m_Input.Enable();
-
             m_CharController = GetComponent<CubeCharacterController>();
             m_CharController.onActivated += () =>
             {
                 m_WarpEffect.Play();
-            };  
+            };
 
-            m_HealthBar = GetComponent<CubeHealthBar>();
-            m_HealthBar.onDeath += ExecuteDeath;
-            m_HealthBar.onCubeAdded += M_HealthBar_onCubeAdded;
-        }
-
-        private void Update()
-        {
-            UpdateInput();
+            HealthBar = GetComponent<CubeHealthBar>();
+            HealthBar.onDeath += ExecuteDeath;
+            HealthBar.onCubeAdded += M_HealthBar_onCubeAdded;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<IVisitor<CubeHealthBar>>(out var visitor))
+            if (other.TryGetComponent<IVisitor<CubeCharacter>>(out var visitor))
             {
-                visitor.Visit(m_HealthBar);
+                visitor.Visit(this);
             }
         }
 
@@ -63,7 +55,7 @@ namespace CubeRunner
             m_AnimatedModel.SetTrigger("Jump");
             m_ParticleSystem?.Play();
 
-            UpdateTopBox(m_HealthBar.GetHeight());
+            UpdateTopBox(HealthBar.GetHeight());
         }
 
         private void UpdateTopBox(float cubesHeight)
@@ -89,11 +81,5 @@ namespace CubeRunner
             m_TopBox.enabled = false;
         }
 
-        private void UpdateInput()
-        {
-            var input = m_Input.Gameplay.ScreenPosition.ReadValue<Vector2>();
-            float xInput = input.x;
-            m_CharController.inputScreenX = xInput;
-        }
     }
 }
