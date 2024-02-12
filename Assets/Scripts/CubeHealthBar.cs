@@ -25,7 +25,9 @@ public class CubeHealthBar : MonoBehaviour
 
     public Vector3 GetNextTopPosition() => GetTopCube().transform.position + new Vector3(0, CUBE_HEIGHT, 0);
     public float GetHeight() => m_ListOfCubes.Count * CUBE_HEIGHT;
+    public int NumberOfCubes => m_ListOfCubes.Count;
     private HealthCube GetTopCube() => m_ListOfCubes[m_ListOfCubes.Count - 1];
+
     public bool IsTopCube(HealthCube healthCube)
     {
         float yPos = healthCube.transform.position.y;

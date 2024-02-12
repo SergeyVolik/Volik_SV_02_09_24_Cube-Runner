@@ -27,6 +27,7 @@ namespace CubeRunner
         public CubeHealthBar HealthBar { get; private set; }
         private Vector3 m_StartModelPosition;
 
+        public bool IsDead { get; private set; }
         private void Awake()
         {
             m_StartModelPosition = m_TopBox.transform.localPosition;
@@ -70,6 +71,7 @@ namespace CubeRunner
             HapticFeedback.HeavyFeedback();
             m_CharController.enabled = false;
             ActivateRagdoll();
+            IsDead = true;
         }
 
         private void ActivateRagdoll()
