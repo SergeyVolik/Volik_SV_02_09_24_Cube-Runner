@@ -55,7 +55,7 @@ namespace CubeRunner
                     character.HealthBar.RemoveCube(item);
                 }
 
-                HapticFeedback.LightFeedback();
+                HapticFeedback.MediumFeedback();
             }
 
             m_CameraImpuls.GenerateImpulse();
